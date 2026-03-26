@@ -11,10 +11,9 @@ import { AIAnalysisResult } from '@/types';
 
 interface AIAnalyzerIntegratedProps {
   simulationImage?: string | null;
-  isSimulationMode?: boolean;
 }
 
-export default function AIAnalyzerIntegrated({ simulationImage, isSimulationMode }: AIAnalyzerIntegratedProps) {
+export default function AIAnalyzerIntegrated({ simulationImage }: AIAnalyzerIntegratedProps) {
   const { settings, history, addAnalysis } = useAppStore();
   const [analyzing, setAnalyzing] = useState(false);
   const [result, setResult] = useState<AIAnalysisResult | null>(null);
@@ -144,7 +143,7 @@ export default function AIAnalyzerIntegrated({ simulationImage, isSimulationMode
                 <div className="relative aspect-square rounded-xl overflow-hidden bg-neutral-100 border border-neutral-200 shadow-sm">
                   <img
                     src={currentImage}
-                    alt="Analyzed"
+                    alt="待分析的宠物图片"
                     className="w-full h-full object-contain"
                   />
                 </div>
@@ -240,7 +239,7 @@ export default function AIAnalyzerIntegrated({ simulationImage, isSimulationMode
                   <div className="flex items-center gap-3">
                     <img
                       src={analysis.imageUrl}
-                      alt="Analysis"
+                      alt={`分析记录：${analysis.petStatus}`}
                       className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
                     />
                     <div className="flex-1 min-w-0">

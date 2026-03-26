@@ -31,26 +31,14 @@ export default function DeviceStatus() {
     fetchStatus();
     const interval = setInterval(fetchStatus, 30000); // 每30秒刷新
     return () => clearInterval(interval);
-  }, []);
+  }, [fetchStatus]);
 
   const status = deviceStatus;
-
-  const getBatteryColor = (level: number) => {
-    if (level > 60) return 'text-green-400';
-    if (level > 30) return 'text-yellow-400';
-    return 'text-red-400';
-  };
 
   const getTempColor = (temp: number) => {
     if (temp < 30) return 'text-green-400';
     if (temp < 35) return 'text-yellow-400';
     return 'text-red-400';
-  };
-
-  const getSignalLevel = (signal: number) => {
-    if (signal >= 4) return '强';
-    if (signal >= 3) return '中';
-    return '弱';
   };
 
   return (

@@ -31,8 +31,8 @@ export interface IconOptions {
   anchor?: Pixel;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IconInstance {
-  // Icon 实例，无需特定方法
 }
 
 // 声明高德地图全局类型
@@ -132,6 +132,7 @@ export function createMarker(
     return null;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const markerOptions: any = {
     position,
     title,

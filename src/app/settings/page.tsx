@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, MessageSquare, Trash2, AlertCircle, Box, Bell, Globe, Info } from 'lucide-react';
+import { ArrowLeft, MessageSquare, Trash2, AlertCircle, Box, Globe, Info } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';

@@ -106,7 +106,8 @@ export default function VideoPlayer({ onScreenshot, onAiAnalyze }: VideoPlayerPr
   };
 
   // 处理模拟分析
-  const handleSimulationSelect = (image: string, type: 'normal' | 'stress') => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleSimulationSelect = (image: string, _type: 'normal' | 'stress') => {
     setSimulationImage(image);
     setIsSimulationMode(true);
     // 自动触发 AI 分析

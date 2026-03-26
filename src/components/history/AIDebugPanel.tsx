@@ -54,7 +54,7 @@ export default function AIDebugPanel() {
   const recentAnalysis = history.analysis[0];
 
   // 处理图片选择
-  const handleSelectImage = (image: string, type?: 'normal' | 'stress') => {
+  const handleSelectImage = (image: string) => {
     setTestImage(image);
     setShowImageSelector(false);
   };

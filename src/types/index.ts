@@ -36,7 +36,7 @@ export interface DeviceStatus {
   alarmType: string;
   alarmDesc: string;
   // 原始数据
-  rawData?: any;
+  rawData?: Record<string, unknown>;
 }
 
 // AI Analysis Types
@@ -124,6 +124,7 @@ export interface LocationResponse {
     target_wifi_lat: number;
     wifi_time: string;
     acc: number;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     etc: any;
     temperature: number[];
     humidity: number[];

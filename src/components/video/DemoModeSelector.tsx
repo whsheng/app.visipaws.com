@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ImageIcon, X, Sparkles } from 'lucide-react';
+import { X, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAppStore } from '@/store/appStore';
 
