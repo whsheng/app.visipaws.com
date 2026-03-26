@@ -13,6 +13,11 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
     title: "VisiPaws",
   },
+  // PWA 配置
+  other: {
+    "apple-mobile-web-app-capable": "yes",
+    "mobile-web-app-capable": "yes",
+  },
 };
 
 export const viewport: Viewport = {
@@ -28,6 +33,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh">
+      <head>
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+      </head>
       <body className={`${inter.className} antialiased`}>
         {children}
       </body>
