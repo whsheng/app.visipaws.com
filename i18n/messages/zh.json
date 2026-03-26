@@ -1,0 +1,82 @@
+{
+  "app": {
+    "name": "VisiPaws",
+    "tagline": "智能宠物监控平台"
+  },
+  "nav": {
+    "live": "直播",
+    "map": "地图",
+    "history": "历史"
+  },
+  "live": {
+    "title": "实时直播",
+    "start": "开始直播",
+    "stop": "停止直播",
+    "screenshot": "截图",
+    "aiAnalyze": "AI 分析",
+    "demoMode": "应激演示",
+    "demoModeDesc": "使用预设图片演示 AI 分析能力",
+    "connecting": "连接中...",
+    "connected": "已连接",
+    "disconnected": "未连接",
+    "noVideo": "点击开始直播查看实时画面"
+  },
+  "device": {
+    "title": "设备状态",
+    "temperature": "温度",
+    "humidity": "湿度",
+    "battery": "电量",
+    "signal": "信号",
+    "location": "位置",
+    "online": "在线",
+    "offline": "离线",
+    "charging": "充电中"
+  },
+  "ai": {
+    "title": "AI 分析",
+    "analyzing": "分析中...",
+    "result": "分析结果",
+    "petStatus": "宠物状态",
+    "abnormal": "异常检测",
+    "suggestion": "建议",
+    "normal": "正常",
+    "stress": "应激",
+    "unknown": "未知"
+  },
+  "map": {
+    "title": "实时位置",
+    "currentLocation": "当前位置",
+    "updateTime": "更新时间",
+    "latitude": "纬度",
+    "longitude": "经度",
+    "speed": "速度"
+  },
+  "history": {
+    "title": "历史记录",
+    "screenshots": "截图记录",
+    "analysis": "分析记录",
+    "empty": "暂无记录",
+    "clear": "清空记录"
+  },
+  "settings": {
+    "title": "设置",
+    "language": "语言",
+    "prompt": "AI 提示词",
+    "promptDesc": "自定义 AI 分析的提示词",
+    "promptPlaceholder": "请输入 AI 分析提示词...",
+    "save": "保存",
+    "saved": "已保存",
+    "demoImages": "演示图片",
+    "clearData": "清除本地数据",
+    "clearConfirm": "确定要清除所有本地数据吗？此操作不可恢复。"
+  },
+  "common": {
+    "cancel": "取消",
+    "confirm": "确认",
+    "close": "关闭",
+    "refresh": "刷新",
+    "loading": "加载中...",
+    "error": "出错了",
+    "retry": "重试"
+  }
+}

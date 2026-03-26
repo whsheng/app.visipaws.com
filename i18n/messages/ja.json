@@ -1,0 +1,82 @@
+{
+  "app": {
+    "name": "VisiPaws",
+    "tagline": "スマートペットモニタリングプラットフォーム"
+  },
+  "nav": {
+    "live": "ライブ",
+    "map": "マップ",
+    "history": "履歴"
+  },
+  "live": {
+    "title": "リアルタイム配信",
+    "start": "配信開始",
+    "stop": "配信停止",
+    "screenshot": "スクリーンショット",
+    "aiAnalyze": "AI 分析",
+    "demoMode": "ストレスデモ",
+    "demoModeDesc": "プリセット画像で AI 分析をデモ",
+    "connecting": "接続中...",
+    "connected": "接続済み",
+    "disconnected": "未接続",
+    "noVideo": "ライブ開始をクリックして映像を表示"
+  },
+  "device": {
+    "title": "デバイス状態",
+    "temperature": "温度",
+    "humidity": "湿度",
+    "battery": "バッテリー",
+    "signal": "信号",
+    "location": "位置",
+    "online": "オンライン",
+    "offline": "オフライン",
+    "charging": "充電中"
+  },
+  "ai": {
+    "title": "AI 分析",
+    "analyzing": "分析中...",
+    "result": "分析結果",
+    "petStatus": "ペット状態",
+    "abnormal": "異常検出",
+    "suggestion": "提案",
+    "normal": "正常",
+    "stress": "ストレス",
+    "unknown": "不明"
+  },
+  "map": {
+    "title": "リアルタイム位置",
+    "currentLocation": "現在位置",
+    "updateTime": "更新時間",
+    "latitude": "緯度",
+    "longitude": "経度",
+    "speed": "速度"
+  },
+  "history": {
+    "title": "履歴",
+    "screenshots": "スクリーンショット",
+    "analysis": "分析履歴",
+    "empty": "記録なし",
+    "clear": "履歴を消去"
+  },
+  "settings": {
+    "title": "設定",
+    "language": "言語",
+    "prompt": "AI プロンプト",
+    "promptDesc": "AI 分析のプロンプトをカスタマイズ",
+    "promptPlaceholder": "AI 分析プロンプトを入力...",
+    "save": "保存",
+    "saved": "保存済み",
+    "demoImages": "デモ画像",
+    "clearData": "ローカルデータを消去",
+    "clearConfirm": "すべてのローカルデータを消去しますか？この操作は元に戻せません。"
+  },
+  "common": {
+    "cancel": "キャンセル",
+    "confirm": "確認",
+    "close": "閉じる",
+    "refresh": "更新",
+    "loading": "読み込み中...",
+    "error": "エラー",
+    "retry": "再試行"
+  }
+}

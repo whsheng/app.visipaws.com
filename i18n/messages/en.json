@@ -1,0 +1,82 @@
+{
+  "app": {
+    "name": "VisiPaws",
+    "tagline": "Smart Pet Monitoring Platform"
+  },
+  "nav": {
+    "live": "Live",
+    "map": "Map",
+    "history": "History"
+  },
+  "live": {
+    "title": "Live Stream",
+    "start": "Start Live",
+    "stop": "Stop Live",
+    "screenshot": "Screenshot",
+    "aiAnalyze": "AI Analysis",
+    "demoMode": "Stress Demo",
+    "demoModeDesc": "Use preset images to demonstrate AI analysis",
+    "connecting": "Connecting...",
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "noVideo": "Click Start Live to view real-time video"
+  },
+  "device": {
+    "title": "Device Status",
+    "temperature": "Temperature",
+    "humidity": "Humidity",
+    "battery": "Battery",
+    "signal": "Signal",
+    "location": "Location",
+    "online": "Online",
+    "offline": "Offline",
+    "charging": "Charging"
+  },
+  "ai": {
+    "title": "AI Analysis",
+    "analyzing": "Analyzing...",
+    "result": "Analysis Result",
+    "petStatus": "Pet Status",
+    "abnormal": "Abnormal Detection",
+    "suggestion": "Suggestion",
+    "normal": "Normal",
+    "stress": "Stress",
+    "unknown": "Unknown"
+  },
+  "map": {
+    "title": "Real-time Location",
+    "currentLocation": "Current Location",
+    "updateTime": "Update Time",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "speed": "Speed"
+  },
+  "history": {
+    "title": "History",
+    "screenshots": "Screenshots",
+    "analysis": "Analysis Records",
+    "empty": "No records",
+    "clear": "Clear Records"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "prompt": "AI Prompt",
+    "promptDesc": "Customize the AI analysis prompt",
+    "promptPlaceholder": "Enter AI analysis prompt...",
+    "save": "Save",
+    "saved": "Saved",
+    "demoImages": "Demo Images",
+    "clearData": "Clear Local Data",
+    "clearConfirm": "Are you sure you want to clear all local data? This action cannot be undone."
+  },
+  "common": {
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "close": "Close",
+    "refresh": "Refresh",
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry"
+  }
+}
