@@ -1,8 +1,8 @@
 import { LocationResponse, DeviceStatus } from '@/types';
 
 const MG_API_BASE = 'http://open.4s12580.com/open/v1';
-const MG_APP_KEY = '6692d10baf2065b72d54c81ad8e2a409';
-const DEVICE_IMEI = process.env.NEXT_PUBLIC_MG_IMEI || '869497051843322';
+const MG_APP_KEY = process.env.NEXT_PUBLIC_MG_APP_KEY || '';
+const DEVICE_IMEI = process.env.NEXT_PUBLIC_MG_IMEI || '';
 
 // 获取设备实时位置
 export async function fetchDeviceLocation(imei?: string): Promise<DeviceStatus | null> {

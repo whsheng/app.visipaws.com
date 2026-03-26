@@ -1,7 +1,7 @@
 // 麦谷车联 SDK 封装
 export const MG_CONFIG = {
-  IMEI: '869497051843322',
-  APP_KEY: '6692d10baf2065b72d54c81ad8e2a409',
+  IMEI: process.env.NEXT_PUBLIC_MG_IMEI || '',
+  APP_KEY: process.env.NEXT_PUBLIC_MG_APP_KEY || '',
   SDK_URL: 'https://cdn-static.m-m10010.com/mgui/common/js/mg-player/pro/index-pro.min.js?v=20251218',
   CSS_URL: 'https://cdn-static.m-m10010.com/mgui/common/js/mg-player/pro/index.css',
 };
