@@ -31,7 +31,7 @@ export default function HomePage() {
 
   return (
     <MainLayout>
-      <div className="space-y-4">
+      <div className="space-y-6">
         {/* Device Status - Compact */}
         <DeviceStatusCompact />
 

@@ -8,7 +8,7 @@ export default function DeviceStatusCompact() {
   const status = deviceStatus;
 
   return (
-    <div className="flex items-center justify-end gap-3 px-4 py-1.5 bg-white rounded-xl shadow-sm border border-neutral-200">
+    <div className="flex items-center justify-end gap-3 px-4 py-2 mt-6 bg-white rounded-xl shadow-sm border border-neutral-200">
       {/* Temperature */}
       <div className="flex items-center gap-1" title="温度">
         <Thermometer className="w-3.5 h-3.5 text-orange-500" />
