@@ -76,7 +76,7 @@ export default function SettingsPage() {
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               placeholder="请输入 AI 分析提示词..."
-              className="min-h-[120px] bg-slate-900/50 border-slate-700 text-white placeholder:text-slate-500"
+              className="min-h-[120px] bg-neutral-50 border-neutral-300 text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:ring-primary/20"
             />
             <div className="flex items-center justify-between">
               <Button
@@ -86,7 +86,7 @@ export default function SettingsPage() {
                 {saved ? '已保存' : '保存'}
               </Button>
               {saved && (
-                <span className="text-sm text-green-400">✓ 已保存</span>
+                <span className="text-sm text-green-600">✓ 已保存</span>
               )}
             </div>
           </CardContent>
@@ -108,25 +108,25 @@ export default function SettingsPage() {
                   value={deviceData.boxId}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDeviceData({ ...deviceData, boxId: e.target.value })}
                   placeholder="请输入宠物箱 ID"
-                  className="bg-slate-900/50 border-slate-700 text-white placeholder:text-slate-500"
+                  className="bg-neutral-50 border-neutral-300 text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:ring-primary/20"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm text-slate-400">宠物昵称</label>
+                <label className="text-sm text-neutral-600">宠物昵称</label>
                 <Input
                   value={deviceData.petName}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDeviceData({ ...deviceData, petName: e.target.value })}
                   placeholder="请输入宠物昵称"
-                  className="bg-slate-900/50 border-slate-700 text-white placeholder:text-slate-500"
+                  className="bg-neutral-50 border-neutral-300 text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:ring-primary/20"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm text-slate-400">紧急联系电话</label>
+                <label className="text-sm text-neutral-600">紧急联系电话</label>
                 <Input
                   value={deviceData.emergencyPhone}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDeviceData({ ...deviceData, emergencyPhone: e.target.value })}
                   placeholder="请输入紧急联系电话"
-                  className="bg-slate-900/50 border-slate-700 text-white placeholder:text-slate-500"
+                  className="bg-neutral-50 border-neutral-300 text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:ring-primary/20"
                 />
               </div>
             </div>
@@ -137,7 +137,7 @@ export default function SettingsPage() {
               保存设备信息
             </Button>
             {saved && (
-              <span className="text-sm text-green-400">✓ 已保存</span>
+              <span className="text-sm text-green-600">✓ 已保存</span>
             )}
           </CardContent>
         </Card>

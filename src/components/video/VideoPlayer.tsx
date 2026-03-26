@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { Play, Square, Camera, Brain, AlertCircle, Sparkles, X } from 'lucide-react';
+import { Play, Square, Brain, AlertCircle, Sparkles, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useAppStore } from '@/store/appStore';
@@ -312,26 +312,15 @@ export default function VideoPlayer({ onScreenshot, onAiAnalyze }: VideoPlayerPr
             </Button>
           )}
 
-          {/* Screenshot and AI Analyze - only show when connected or demo mode */}
+          {/* AI Analyze - only show when connected or demo mode */}
           {(status === 'connected' || (mode === 'demo' && currentDemoImage)) && (
-            <>
-              <Button
-                onClick={handleScreenshot}
-                variant="outline"
-                className="bg-white"
-              >
-                <Camera className="w-4 h-4 mr-2" />
-                截图
-              </Button>
-
-              <Button
-                onClick={handleAiAnalyze}
-                variant="secondary"
-              >
-                <Brain className="w-4 h-4 mr-2" />
-                AI 分析
-              </Button>
-            </>
+            <Button
+              onClick={handleAiAnalyze}
+              variant="secondary"
+            >
+              <Brain className="w-4 h-4 mr-2" />
+              AI 分析
+            </Button>
           )}
         </div>
 
