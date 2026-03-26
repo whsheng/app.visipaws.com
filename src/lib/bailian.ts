@@ -151,18 +151,15 @@ export async function callBailianAPI(
 "suggestion": "给主人的建议"
 }`;
 
-  // 优化：如果图片是 data URL，移除前缀减少传输大小
-  const cleanBase64 = imageBase64.replace(/^data:image\/\w+;base64,/, '');
-
   const requestBody = {
-    model: 'qwen-vl-plus',
+    model: 'qwen3-vl-plus',
     input: {
       messages: [
         {
           role: 'user',
           content: [
             {
-              image: `data:image/jpeg;base64,${cleanBase64}`,
+              image: imageBase64,
             },
             {
               text: prompt || defaultPrompt,
@@ -171,11 +168,6 @@ export async function callBailianAPI(
         },
       ],
     },
-    // 优化：添加参数控制响应速度
-    parameters: {
-      temperature: 0.1,  // 降低随机性，提高响应速度
-      max_tokens: 500,   // 限制输出长度
-    },
   };
 
   const response = await fetch(BAILIAN_API_URL, {
@@ -183,11 +175,8 @@ export async function callBailianAPI(
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${BAILIAN_API_KEY}`,
-      // 优化：添加超时控制
-      'X-DashScope-SSE': 'disable',  // 禁用 SSE 以减少延迟
     },
     body: JSON.stringify(requestBody),
-    // 优化：添加信号超时
     signal: AbortSignal.timeout(30000), // 30 秒超时
   });
 
