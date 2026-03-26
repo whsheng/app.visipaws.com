@@ -1,6 +1,6 @@
 import { LocationResponse, DeviceStatus } from '@/types';
 
-const MG_API_BASE = 'http://open.4s12580.com/open/v1';
+const MG_API_BASE = 'https://open.4s12580.com/open/v1';
 const MG_APP_KEY = process.env.NEXT_PUBLIC_MG_APP_KEY || '';
 const DEVICE_IMEI = process.env.NEXT_PUBLIC_MG_IMEI || '';
 
