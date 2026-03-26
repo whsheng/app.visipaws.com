@@ -66,7 +66,6 @@ export default function VideoPlayer({ onScreenshot, onAiAnalyze }: VideoPlayerPr
   useEffect(() => {
     const handleCapture = (e: Event) => {
       const customEvent = e as CustomEvent;
-      console.log('📸 收到截图事件');
       
       if (!customEvent.detail) {
         console.warn('📸 截图事件无数据');
@@ -81,7 +80,6 @@ export default function VideoPlayer({ onScreenshot, onAiAnalyze }: VideoPlayerPr
         }
         // 2. 自动触发 AI 分析
         if (onAiAnalyze) {
-          console.log('📸 截图完成，自动触发 AI 分析...');
           onAiAnalyze(base64);
         }
       };
@@ -89,11 +87,9 @@ export default function VideoPlayer({ onScreenshot, onAiAnalyze }: VideoPlayerPr
       // 如果 detail 是对象且有 content 属性（blob），需要转换
       if (typeof customEvent.detail === 'object' && 'content' in customEvent.detail) {
         const blob = customEvent.detail.content;
-        console.log('📸 收到 blob 数据，转换为 base64...');
         const reader = new FileReader();
         reader.onloadend = () => {
           const base64 = reader.result as string;
-          console.log('📸 blob 转换为 base64 成功');
           processImage(base64);
         };
         reader.onerror = () => {

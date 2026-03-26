@@ -35,11 +35,8 @@ export default function MapContainer() {
     setRefreshing(true);
     try {
       const status = await fetchDeviceLocation();
-      console.log('刷新位置结果:', status);
       if (status) {
         setDeviceStatus(status);
-      } else {
-        console.warn('未获取到位置信息');
       }
     } catch (error) {
       console.error('Failed to refresh location:', error);
@@ -78,7 +75,6 @@ export default function MapContainer() {
     // 页面加载时不自动刷新，由用户手动点击刷新
     const interval = setInterval(() => {
       if (deviceStatus?.isOnline) {
-        console.log('⏰ 定时刷新位置（120 秒）');
         handleRefresh();
       }
     }, 120000); // 120 秒
@@ -90,22 +86,18 @@ export default function MapContainer() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!mapInstanceRef.current || !deviceStatus) {
-      console.log('跳过 marker 更新：mapInstance=', !!mapInstanceRef.current, 'deviceStatus=', !!deviceStatus);
       return;
     }
 
     const position: [number, number] = [deviceStatus.lng, deviceStatus.lat];
-    console.log('更新 marker 位置:', position);
 
     // 更新地图中心
     mapInstanceRef.current.setCenter(position);
 
     // 更新或创建标记（使用猫咪图标）
     if (markerRef.current) {
-      console.log('更新现有 marker');
       markerRef.current.setPosition(position);
     } else {
-      console.log('创建新 marker');
       markerRef.current = createMarker(position, '宠物箱位置', {
         icon: '/icons/cat-marker.svg',
         size: [36, 36],
