@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { Play, Square, Brain, AlertCircle, Sparkles, X } from 'lucide-react';
+import { Play, Square, AlertCircle, Sparkles, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useAppStore } from '@/store/appStore';
@@ -62,18 +62,56 @@ export default function VideoPlayer({ onScreenshot, onAiAnalyze }: VideoPlayerPr
     }
   }, [sdkLoaded, initPlayer]);
 
-  // 监听截图事件
+  // 监听截图事件 - 截图后自动触发 AI 分析
   useEffect(() => {
     const handleCapture = (e: Event) => {
       const customEvent = e as CustomEvent;
-      if (customEvent.detail && onScreenshot) {
-        onScreenshot(customEvent.detail);
+      console.log('📸 收到截图事件');
+      
+      if (!customEvent.detail) {
+        console.warn('📸 截图事件无数据');
+        return;
+      }
+      
+      // 处理 blob 或 base64 数据
+      const processImage = (base64: string) => {
+        // 1. 保存截图
+        if (onScreenshot) {
+          onScreenshot(base64);
+        }
+        // 2. 自动触发 AI 分析
+        if (onAiAnalyze) {
+          console.log('📸 截图完成，自动触发 AI 分析...');
+          onAiAnalyze(base64);
+        }
+      };
+      
+      // 如果 detail 是对象且有 content 属性（blob），需要转换
+      if (typeof customEvent.detail === 'object' && 'content' in customEvent.detail) {
+        const blob = customEvent.detail.content;
+        console.log('📸 收到 blob 数据，转换为 base64...');
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64 = reader.result as string;
+          console.log('📸 blob 转换为 base64 成功');
+          processImage(base64);
+        };
+        reader.onerror = () => {
+          console.error('📸 blob 转 base64 失败');
+        };
+        reader.readAsDataURL(blob);
+        return;
+      }
+      
+      // 如果 detail 已经是 base64 字符串
+      if (typeof customEvent.detail === 'string') {
+        processImage(customEvent.detail);
       }
     };
 
     document.addEventListener('captureImg', handleCapture);
     return () => document.removeEventListener('captureImg', handleCapture);
-  }, [onScreenshot]);
+  }, [onScreenshot, onAiAnalyze]);
 
   // 开始直播
   const handleStartLive = () => {
@@ -110,6 +148,12 @@ export default function VideoPlayer({ onScreenshot, onAiAnalyze }: VideoPlayerPr
   const handleSimulationSelect = (image: string, _type: 'normal' | 'stress') => {
     setSimulationImage(image);
     setIsSimulationMode(true);
+    
+    // 1.5 秒后关闭对话框
+    setTimeout(() => {
+      setShowSimulationSelector(false);
+    }, 1500);
+    
     // 自动触发 AI 分析
     setTimeout(() => {
       fetch(image)
@@ -131,39 +175,9 @@ export default function VideoPlayer({ onScreenshot, onAiAnalyze }: VideoPlayerPr
     setIsSimulationMode(false);
   };
 
-  // 截图
-  const handleScreenshot = () => {
-    if (isSimulationMode && simulationImage) {
-      // 模拟模式：使用当前模拟图片
-      fetch(simulationImage)
-        .then((res) => res.blob())
-        .then((blob) => {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            const base64 = reader.result as string;
-            onScreenshot?.(base64);
-          };
-          reader.readAsDataURL(blob);
-        });
-    } else if (mode === 'demo' && currentDemoImage) {
-      // 演示模式：使用当前演示图片
-      fetch(currentDemoImage)
-        .then((res) => res.blob())
-        .then((blob) => {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            const base64 = reader.result as string;
-            onScreenshot?.(base64);
-          };
-          reader.readAsDataURL(blob);
-        });
-    } else if (playerRef.current && status === 'connected') {
-      // 直播模式：调用 SDK 截图
-      playerRef.current.capture();
-    }
-  };
-
-  // AI 分析
+  // AI 分析 - 只处理模拟模式和演示模式
+  // 直播模式：用户点击播放器截图按钮后自动触发 AI 分析（通过 useEffect 监听）
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleAiAnalyze = () => {
     if (isSimulationMode && simulationImage) {
       // 模拟模式
@@ -189,9 +203,6 @@ export default function VideoPlayer({ onScreenshot, onAiAnalyze }: VideoPlayerPr
           };
           reader.readAsDataURL(blob);
         });
-    } else if (status === 'connected') {
-      // 直播模式：先截图再分析
-      handleScreenshot();
     }
   };
 
@@ -312,15 +323,11 @@ export default function VideoPlayer({ onScreenshot, onAiAnalyze }: VideoPlayerPr
             </Button>
           )}
 
-          {/* AI Analyze - only show when connected or demo mode */}
-          {(status === 'connected' || (mode === 'demo' && currentDemoImage)) && (
-            <Button
-              onClick={handleAiAnalyze}
-              variant="secondary"
-            >
-              <Brain className="w-4 h-4 mr-2" />
-              AI 分析
-            </Button>
+          {/* 提示：直播时点击播放器上的截图按钮自动进行 AI 分析 */}
+          {status === 'connected' && (
+            <p className="text-xs text-neutral-500">
+              📸 点击播放器上的截图按钮，自动进行 AI 分析
+            </p>
           )}
         </div>
 

@@ -1,0 +1,15 @@
+<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景圆形 -->
+  <circle cx="18" cy="18" r="18" fill="url(#gradient)"/>
+  
+  <!-- 猫咪剪影 -->
+  <path d="M10 26V18L8 16V14L10 15V12C10 9.79 11.79 8 14 8H16V6H20V8H22C24.21 8 26 9.79 26 12V15L28 14V16L26 18V26H10Z" fill="white" opacity="0.95"/>
+  
+  <!-- 渐变定义 -->
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4"/>
+      <stop offset="100%" style="stop-color:#3b82f6"/>
+    </linearGradient>
+  </defs>
+</svg>

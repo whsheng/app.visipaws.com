@@ -17,9 +17,11 @@ export default function Header() {
         {/* Logo */}
         <div className="flex items-center gap-2">
           <img
-            src="/logo.ico"
+            src="/logo.png"
             alt="VisiPaws"
             className="w-8 h-8 rounded-lg shadow-md"
+            loading="eager"
+            decoding="sync"
           />
           <div>
             <h1 className="text-base font-bold text-neutral-800">VisiPaws</h1>

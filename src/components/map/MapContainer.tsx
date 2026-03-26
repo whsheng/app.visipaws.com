@@ -17,6 +17,7 @@ export default function MapContainer() {
   const [sdkLoaded, setSdkLoaded] = useState(false);
   const [sdkError, setSdkError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [showDebug, setShowDebug] = useState(false); // 调试模式开关
 
   // 加载高德地图 SDK
   useEffect(() => {
@@ -34,8 +35,11 @@ export default function MapContainer() {
     setRefreshing(true);
     try {
       const status = await fetchDeviceLocation();
+      console.log('刷新位置结果:', status);
       if (status) {
         setDeviceStatus(status);
+      } else {
+        console.warn('未获取到位置信息');
       }
     } catch (error) {
       console.error('Failed to refresh location:', error);
@@ -69,25 +73,45 @@ export default function MapContainer() {
     };
   }, [sdkLoaded]);
 
-  // 更新标记位置
+  // 定时刷新位置（每 120 秒）
   useEffect(() => {
-    if (!mapInstanceRef.current || !deviceStatus) return;
+    // 页面加载时不自动刷新，由用户手动点击刷新
+    const interval = setInterval(() => {
+      if (deviceStatus?.isOnline) {
+        console.log('⏰ 定时刷新位置（120 秒）');
+        handleRefresh();
+      }
+    }, 120000); // 120 秒
+
+    return () => clearInterval(interval);
+  }, [deviceStatus?.isOnline]);
+
+  // 更新标记位置
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!mapInstanceRef.current || !deviceStatus) {
+      console.log('跳过 marker 更新：mapInstance=', !!mapInstanceRef.current, 'deviceStatus=', !!deviceStatus);
+      return;
+    }
 
     const position: [number, number] = [deviceStatus.lng, deviceStatus.lat];
+    console.log('更新 marker 位置:', position);
 
     // 更新地图中心
     mapInstanceRef.current.setCenter(position);
 
     // 更新或创建标记（使用猫咪图标）
     if (markerRef.current) {
+      console.log('更新现有 marker');
       markerRef.current.setPosition(position);
     } else {
+      console.log('创建新 marker');
       markerRef.current = createMarker(position, '宠物箱位置', {
         icon: '/icons/cat-marker.svg',
         size: [36, 36],
         anchor: [18, 36],  // 底部中心
       });
-      if (markerRef.current) {
+      if (markerRef.current && mapInstanceRef.current) {
         mapInstanceRef.current.add(markerRef.current);
       }
     }
@@ -149,9 +173,19 @@ export default function MapContainer() {
                   <Navigation className="w-5 h-5 text-primary" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-neutral-800 truncate">
-                    当前位置
-                  </p>
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-sm font-medium text-neutral-800 truncate">
+                      当前位置
+                    </p>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowDebug(!showDebug)}
+                      className={`h-6 px-2 text-xs ${showDebug ? 'bg-primary/10 text-primary' : 'text-neutral-400 hover:text-primary'}`}
+                    >
+                      {showDebug ? '🔒 关闭调试' : '🐛 打开调试'}
+                    </Button>
+                  </div>
                   <p className="text-xs text-neutral-600 truncate">{status.location || '未知位置'}</p>
                   <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-xs text-neutral-500">
                     <span>纬度：{status.lat.toFixed(6)}</span>
@@ -162,6 +196,16 @@ export default function MapContainer() {
                     <div className="flex items-center gap-1 mt-1 text-xs text-neutral-400">
                       <Clock className="w-3 h-3" />
                       <span>更新时间：{status.gpsTime}</span>
+                    </div>
+                  )}
+
+                  {/* 调试信息 - 可展开 */}
+                  {showDebug && (
+                    <div className="mt-3 pt-3 border-t border-neutral-200">
+                      <p className="text-xs font-semibold text-neutral-700 mb-2">📊 原始数据 (JSON):</p>
+                      <pre className="bg-neutral-900 text-green-400 p-3 rounded-lg text-xs overflow-auto max-h-[400px] font-mono">
+                        {JSON.stringify(status, null, 2)}
+                      </pre>
                     </div>
                   )}
                 </div>

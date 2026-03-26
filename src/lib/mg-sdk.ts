@@ -26,7 +26,8 @@ export interface MgPlayerInstance {
   setWindowNum: (num: number) => void;
   initAutoPlayer: (config: { imei: string; channel: number }) => void;
   destroyPlayer: () => void;
-  capture: () => void;
+  // 注意：capture() 方法在 SDK 中可能不存在，需要通过模拟点击截图按钮来触发
+  // capture: () => void;
 }
 
 // 加载 SDK
@@ -78,9 +79,9 @@ export function createPlayer(containerId: string): MgPlayerInstance | null {
     id: containerId,
     appkey: MG_CONFIG.APP_KEY,
     isExtend: false,
-    isScreenshot: true,
-    isRecord: true,
-    screenshotCustom: true,
+    isScreenshot: true,  // 显示截图按钮
+    isRecord: false,     // 隐藏录制按钮
+    screenshotCustom: true,  // 自定义截图事件
   });
 
   player.setWindowNum(1);

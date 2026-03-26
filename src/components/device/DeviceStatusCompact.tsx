@@ -1,34 +1,10 @@
 'use client';
 
-import { useEffect } from 'react';
 import { Thermometer, Droplets, Satellite, Signal } from 'lucide-react';
 import { useAppStore } from '@/store/appStore';
-import { fetchDeviceLocation } from '@/lib/api';
 
 export default function DeviceStatusCompact() {
-  const { deviceStatus, setDeviceStatus } = useAppStore();
-
-  useEffect(() => {
-    // 立即获取设备状态
-    const fetchStatus = async () => {
-      const status = await fetchDeviceLocation();
-      if (status) {
-        setDeviceStatus(status);
-      }
-    };
-
-    fetchStatus();
-
-    // 定时刷新（每 30 秒）- 仅当设备在线时
-    const interval = setInterval(() => {
-      if (deviceStatus?.isOnline) {
-        fetchStatus();
-      }
-    }, 30000);
-
-    return () => clearInterval(interval);
-  }, [deviceStatus?.isOnline, setDeviceStatus]);
-
+  const { deviceStatus } = useAppStore();
   const status = deviceStatus;
 
   return (
