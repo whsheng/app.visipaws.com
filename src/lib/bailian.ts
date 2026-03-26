@@ -1,6 +1,7 @@
 // 阿里百炼 API 封装
 const BAILIAN_API_KEY = process.env.BAILIAN_API_KEY || '';
-const BAILIAN_API_URL = process.env.BAILIAN_API_URL || 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation';
+// 默认使用海外 endpoint（优化 Vercel 部署性能）
+const BAILIAN_API_URL = process.env.BAILIAN_API_URL || 'https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation';
 
 export interface BailianResponse {
   output?: {
@@ -149,7 +150,10 @@ export async function callBailianAPI(
 "reason": "简短的理由，例如：发现飞机耳和瞳孔放大",
 "suggestion": "给主人的建议"
 }`;
-  
+
+  // 优化：如果图片是 data URL，移除前缀减少传输大小
+  const cleanBase64 = imageBase64.replace(/^data:image\/\w+;base64,/, '');
+
   const requestBody = {
     model: 'qwen-vl-plus',
     input: {
@@ -158,7 +162,7 @@ export async function callBailianAPI(
           role: 'user',
           content: [
             {
-              image: imageBase64,
+              image: `data:image/jpeg;base64,${cleanBase64}`,
             },
             {
               text: prompt || defaultPrompt,
@@ -167,6 +171,11 @@ export async function callBailianAPI(
         },
       ],
     },
+    // 优化：添加参数控制响应速度
+    parameters: {
+      temperature: 0.1,  // 降低随机性，提高响应速度
+      max_tokens: 500,   // 限制输出长度
+    },
   };
 
   const response = await fetch(BAILIAN_API_URL, {
@@ -174,8 +183,12 @@ export async function callBailianAPI(
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${BAILIAN_API_KEY}`,
+      // 优化：添加超时控制
+      'X-DashScope-SSE': 'disable',  // 禁用 SSE 以减少延迟
     },
     body: JSON.stringify(requestBody),
+    // 优化：添加信号超时
+    signal: AbortSignal.timeout(30000), // 30 秒超时
   });
 
   if (!response.ok) {
