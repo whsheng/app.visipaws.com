@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { Play, Square, AlertCircle, Sparkles, X } from 'lucide-react';
+import { Play, Square, Brain, AlertCircle, Sparkles, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useAppStore } from '@/store/appStore';
@@ -61,6 +61,60 @@ export default function VideoPlayer({ onScreenshot, onAiAnalyze }: VideoPlayerPr
       initPlayer();
     }
   }, [sdkLoaded, initPlayer]);
+
+  // 移动端优化：强制显示截图按钮并添加触摸支持
+  useEffect(() => {
+    if (!sdkLoaded || status !== 'connected') return;
+
+    const container = document.getElementById('mg-player-container');
+    if (!container) return;
+
+    let screenshotBtn: Element | null = null;
+    let handleTouchEnd: EventListener | null = null;
+
+    // 等待播放器渲染完成
+    setTimeout(() => {
+      // 1. 查找截图按钮
+      screenshotBtn = container.querySelector('.player-printScreen-btn');
+      const controlsBox = container.querySelector('.mg-controls-box');
+      
+      if (screenshotBtn) {
+        console.log('✅ 找到截图按钮');
+        
+        // 2. 强制显示按钮（移动端可能被隐藏）
+        (screenshotBtn as HTMLElement).style.display = 'inline-block';
+        (screenshotBtn as HTMLElement).style.opacity = '1';
+        (screenshotBtn as HTMLElement).style.visibility = 'visible';
+        (screenshotBtn as HTMLElement).style.pointerEvents = 'auto';
+        
+        // 3. 添加触摸事件支持（iOS Safari）
+        handleTouchEnd = (e: Event) => {
+          e.preventDefault(); // 阻止默认行为
+          e.stopPropagation(); // 阻止冒泡
+          console.log('📸 触摸截图按钮');
+          // 触发点击事件
+          (screenshotBtn as HTMLElement).click();
+        };
+        
+        screenshotBtn.addEventListener('touchend', handleTouchEnd, { passive: false } as EventListenerOptions);
+        
+        // 4. 确保控制栏显示
+        if (controlsBox) {
+          (controlsBox as HTMLElement).style.display = 'flex';
+          (controlsBox as HTMLElement).style.opacity = '1';
+        }
+      } else {
+        console.warn('⚠️ 未找到截图按钮，播放器可能未完全渲染');
+      }
+    }, 500); // 等待 500ms 让播放器完全渲染
+
+    // 清理
+    return () => {
+      if (screenshotBtn && handleTouchEnd) {
+        screenshotBtn.removeEventListener('touchend', handleTouchEnd);
+      }
+    };
+  }, [sdkLoaded, status]);
 
   // 监听截图事件 - 截图后自动触发 AI 分析
   useEffect(() => {
@@ -171,35 +225,46 @@ export default function VideoPlayer({ onScreenshot, onAiAnalyze }: VideoPlayerPr
     setIsSimulationMode(false);
   };
 
-  // AI 分析 - 只处理模拟模式和演示模式
-  // 直播模式：用户点击播放器截图按钮后自动触发 AI 分析（通过 useEffect 监听）
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // AI 分析 - 支持多种截图方式
   const handleAiAnalyze = () => {
-    if (isSimulationMode && simulationImage) {
-      // 模拟模式
-      fetch(simulationImage)
-        .then((res) => res.blob())
-        .then((blob) => {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            const base64 = reader.result as string;
-            onAiAnalyze?.(base64);
-          };
-          reader.readAsDataURL(blob);
-        });
-    } else if (mode === 'demo' && currentDemoImage) {
-      // 演示模式
-      fetch(currentDemoImage)
-        .then((res) => res.blob())
-        .then((blob) => {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            const base64 = reader.result as string;
-            onAiAnalyze?.(base64);
-          };
-          reader.readAsDataURL(blob);
-        });
+    if (status !== 'connected') return;
+    
+    const container = document.getElementById('mg-player-container');
+    if (!container) return;
+    
+    console.log('🤖 开始 AI 分析流程...');
+    
+    // 方案 B：模拟点击截图按钮（主要方案）
+    const screenshotBtn = container.querySelector('.player-printScreen-btn');
+    if (screenshotBtn) {
+      console.log('📸 找到截图按钮，模拟点击...');
+      (screenshotBtn as HTMLElement).click();
+      return;
     }
+    
+    // 方案 A：备用方案 - 调用 screenshot 方法
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const player = playerRef.current as any;
+    if (player?.screenshot) {
+      console.log('📸 调用 screenshot 方法...');
+      try {
+        const blob = player.screenshot('ai-analyze', 'png', 1, 'blob');
+        if (blob) {
+          const event = new CustomEvent('captureImg', { 
+            detail: { content: blob } 
+          });
+          document.dispatchEvent(event);
+          console.log('📸 已触发 captureImg 事件');
+          return;
+        }
+      } catch (error) {
+        console.warn('⚠️ screenshot 方法调用失败:', error);
+      }
+    }
+    
+    // 都失败了
+    console.warn('⚠️ 截图失败，请手动操作');
+    alert('截图失败，请手动点击播放器上的截图按钮');
   };
 
   // 获取状态显示
@@ -319,11 +384,16 @@ export default function VideoPlayer({ onScreenshot, onAiAnalyze }: VideoPlayerPr
             </Button>
           )}
 
-          {/* 提示：直播时点击播放器上的截图按钮自动进行 AI 分析 */}
+          {/* AI Analyze button - show when connected */}
           {status === 'connected' && (
-            <p className="text-xs text-neutral-500">
-              📸 点击播放器上的截图按钮，自动进行 AI 分析
-            </p>
+            <Button
+              onClick={handleAiAnalyze}
+              variant="secondary"
+              className="gap-2"
+            >
+              <Brain className="w-4 h-4" />
+              AI 分析
+            </Button>
           )}
         </div>
 

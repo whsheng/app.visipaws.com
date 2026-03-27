@@ -19,6 +19,8 @@ export interface MgPlayerConfig {
   isExtend?: boolean;
   isScreenshot?: boolean;
   isRecord?: boolean;
+  isFullscreen?: boolean;
+  isAudio?: boolean;
   screenshotCustom?: boolean;
 }
 
@@ -78,10 +80,12 @@ export function createPlayer(containerId: string): MgPlayerInstance | null {
   const player = new window.mgPlayer({
     id: containerId,
     appkey: MG_CONFIG.APP_KEY,
-    isExtend: false,
-    isScreenshot: true,  // 显示截图按钮
-    isRecord: false,     // 隐藏录制按钮
-    screenshotCustom: true,  // 自定义截图事件
+    isExtend: false,       // 不扩展多屏
+    isScreenshot: true,    // ✅ 显示截图按钮
+    isRecord: false,       // ❌ 隐藏录制按钮
+    isFullscreen: false,   // ❌ 隐藏全屏按钮
+    isAudio: false,        // ❌ 静音（托运箱通常无音频）
+    screenshotCustom: true, // ✅ 自定义截图事件
   });
 
   player.setWindowNum(1);

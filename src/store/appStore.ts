@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import {
   DeviceStatus,
   LiveStreamState,
@@ -163,6 +163,54 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: 'visipaws-storage',
+      storage: createJSONStorage(() => {
+        // 自定义存储，捕获 QuotaExceededError
+        return {
+          getItem: (name) => {
+            if (typeof window === 'undefined') return null;
+            try {
+              return localStorage.getItem(name);
+            } catch (e) {
+              console.warn('LocalStorage getItem 失败:', e);
+              return null;
+            }
+          },
+          setItem: (name, value) => {
+            if (typeof window === 'undefined') return;
+            try {
+              localStorage.setItem(name, value);
+            } catch (e) {
+              if ((e as Error).name === 'QuotaExceededError') {
+                console.warn('⚠️ LocalStorage 已满，清理旧数据...');
+                // 清理策略：只保留设置，清除历史记录
+                const state = JSON.parse(localStorage.getItem(name) || '{}');
+                const newState = {
+                  deviceInfo: state.deviceInfo,
+                  settings: state.settings,
+                  history: { screenshots: [], analysis: [] },
+                };
+                try {
+                  localStorage.setItem(name, JSON.stringify(newState));
+                  localStorage.setItem(name, value); // 重试
+                } catch {
+                  console.error('LocalStorage 清理后仍然失败，清除所有数据');
+                  localStorage.removeItem(name);
+                }
+              } else {
+                console.error('LocalStorage setItem 失败:', e);
+              }
+            }
+          },
+          removeItem: (name) => {
+            if (typeof window === 'undefined') return;
+            try {
+              localStorage.removeItem(name);
+            } catch (e) {
+              console.warn('LocalStorage removeItem 失败:', e);
+            }
+          },
+        };
+      }),
       partialize: (state) => ({
         deviceInfo: state.deviceInfo,
         history: state.history,
