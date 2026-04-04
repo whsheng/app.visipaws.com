@@ -28,16 +28,6 @@
 - **圆角**：lg=16px, md=12px, sm=8px, xl=24px
 - **字体**：系统字体，清晰易读
 
-### 🚀 最新优化
-
-- ✅ 首页最近分析只显示 2 条，风格与数据页一致
-- ✅ 数据页面移除截图标签，直接显示分析历史
-- ✅ 分析结果 Dialog 优化，移动端体验更好
-- ✅ 地图使用猫咪图标作为 POI 标记
-- ✅ 设备温湿度模拟数据（26°C / 60%）
-- ✅ 设备在线时每 30 秒自动刷新位置
-- ✅ 地图支持手动刷新位置
-- ✅ 使用自定义 logo.ico 品牌标识
 
 ## 🛠️ 技术栈
 
@@ -313,69 +303,8 @@ visipaws-next/
 
 ---
 
-### 2. 设备位置
 
-**端点**：`POST http://open.4s12580.com/open/v1/GetRealtimeTrackList`
-
-**请求**：
-```json
-{
-  "device_id": ["8694970512"],
-  "map_coord_type": 2
-}
-```
-
-**响应字段**：
-```typescript
-interface DeviceStatus {
-  imei: string;
-  // 位置
-  lat: number;          // 高德纬度
-  lng: number;          // 高德经度
-  location: string;     // 地址文本
-  altitude: number;     // 海拔（米）
-  
-  // 状态
-  isOnline: boolean;    // 在线状态
-  drivingStatus: boolean; // 行驶状态
-  accStatus: boolean;   // ACC 点火
-  
-  // 速度和方向
-  speed: number;        // km/h
-  direction: number;    // 角度
-  
-  // 信号
-  gpsSignal: number;    // GPS 卫星颗数
-  beidouSignal: number; // 北斗卫星颗数
-  gsmSignal: number;    // GSM 信号
-  gpsFlag: number;      // 0=GPS, 2=基站，3=WiFi
-  
-  // 里程
-  totalMileage: number; // 总里程（米）
-  todayMileage: number; // 今日里程（米）
-  
-  // 电池和油量
-  voltage: number;      // 电压
-  oilLevel: number;     // 油量
-  
-  // 温湿度（模拟）
-  temperature: number;  // 26°C
-  humidity: number;     // 60%
-  
-  // 时间
-  gpsTime: string;
-  receiveTime: string;
-  
-  // 报警
-  isAlarm: boolean;
-  alarmType: string;
-  alarmDesc: string;
-}
-```
-
----
-
-### 3. 高德地图
+### 2. 高德地图
 
 **SDK**：`https://webapi.amap.com/maps?v=2.0&key={KEY}`
 
@@ -405,44 +334,6 @@ const marker = createMarker([lng, lat], '宠物箱位置', {
 ## 🚀 部署
 
 ### 部署到 Vercel
-
-1. **安装 Vercel CLI**
-   ```bash
-   npm i -g vercel
-   ```
-
-2. **登录并部署**
-   ```bash
-   vercel login
-   vercel
-   ```
-
-3. **配置环境变量**
-   
-   在 Vercel Dashboard → Project Settings → Environment Variables 添加：
-   - `BAILIAN_API_KEY`
-   - `NEXT_PUBLIC_AMAP_KEY`
-   - `NEXT_PUBLIC_AMAP_SECURITY_CONFIG`
-   - `NEXT_PUBLIC_MG_IMEI`
-   - `NEXT_PUBLIC_MG_APP_KEY`
-
-4. **绑定自定义域名**
-   
-   在 Vercel Dashboard → Domain 添加 `app.visipaws.com`
-
----
-
-### 本地构建测试
-
-```bash
-# 构建
-npm run build
-
-# 启动生产服务器
-npm start
-```
-
-访问 http://localhost:3000
 
 ---
 
@@ -478,26 +369,6 @@ npm start
 
 ---
 
-## 🧪 开发命令
-
-```bash
-# 开发模式
-npm run dev
-
-# 构建生产版本
-npm run build
-
-# 启动生产服务器
-npm start
-
-# 代码检查
-npm run lint
-
-# TypeScript 检查
-npx tsc --noEmit
-```
-
----
 
 ## 📝 更新日志
 
@@ -539,12 +410,8 @@ npx tsc --noEmit
    - 使用 `qwen-vl-plus` 模型
    - API Key 保存在服务端，不要泄露
 
-3. **麦谷车联设备**
-   - 需要真实设备在线
-   - IMEI 和 APP Key 由设备提供
-   - 设备离线时使用最后已知位置
 
-4. **模拟数据**
+3. **模拟数据**
    - 温湿度：26°C / 60%（设备未接传感器）
    - 设备状态：离线时显示模拟数据
    - 地图：未配置 API Key 时显示深圳南山
@@ -568,14 +435,6 @@ MIT License
 
 ---
 
-## 📧 联系方式
-
-- **项目**：VisiPaws - 智能宠物监控平台
-- **用途**：青少年科技比赛
-- **版本**：v0.1.0
-- **最后更新**：2026-03-26
-
----
 
 <div align="center">
 
